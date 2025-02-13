@@ -62,6 +62,7 @@ def get_train_command(config: Dict[str, Any]) -> str:
     env_kwargs_str = " \\\n    ".join([
         f"+env.{key}={value}" for key, value in env_kwargs.items()
     ])
+    
     cmd = [
         "python -m verl.trainer.main_ppo",
         f"multi_processing={config['system']['multi_processing']}",
@@ -155,7 +156,7 @@ def main():
         overrides = parse_override_args(args.overrides)
         config = deep_update(config, overrides)
     
-    print(get_train_command(config))
+    print(get_train_command(config))    
 
 if __name__ == "__main__":
     main()

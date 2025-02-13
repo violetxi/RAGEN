@@ -222,7 +222,7 @@ class LLMGenerationManager:
             next_obs, dones = self.env_class.execute_predictions(
                 envs, responses_str, self.tokenizer.pad_token
             )
-            
+            breakpoint()
             active_mask = torch.tensor([not done for done in dones], dtype=torch.bool)
             active_num_list.append(active_mask.sum().item())
             next_obs_ids = self._process_next_obs(next_obs)

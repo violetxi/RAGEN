@@ -604,9 +604,8 @@ class RayPPOTrainer(object):
             config=gen_config,
         )
 
-        envs = [self.env.copy() for _ in range(self.config.data.train_batch_size * self.config.actor_rollout_ref.rollout.n_agent)] 
-
-
+        envs = [self.env.copy() for _ in range(self.config.data.train_batch_size * self.config.actor_rollout_ref.rollout.n_agent)]
+        breakpoint()
 
         # start training loop
         for epoch in range(self.config.trainer.total_epochs):
@@ -625,7 +624,7 @@ class RayPPOTrainer(object):
 
                 # pop those keys for generation
                 gen_batch = batch.pop(batch_keys=['input_ids', 'attention_mask', 'position_ids'])
-
+                breakpoint()
                 ####################
                 # original code here
 
