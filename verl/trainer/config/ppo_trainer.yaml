@@ -1,7 +1,6 @@
 data:
   tokenizer: null
-  train_files: ~/data/rlhf/gsm8k/train.parquet
-  val_files: ~/data/rlhf/gsm8k/test.parquet
+  dataset_id: HuggingFaceH4/MATH-500
   prompt_key: prompt
   max_prompt_length: 512
   max_response_length: 512
@@ -16,7 +15,7 @@ data:
 actor_rollout_ref:
   hybrid_engine: True
   model:
-    path: ~/models/deepseek-llm-7b-chat
+    path: violetxi/sft_tir_3e-5_b32_warmup0.1_checkpoint-epoch2
     external_lib: null
     override_config: { }
     enable_gradient_checkpointing: False
@@ -167,7 +166,7 @@ multi_processing: ray
 max_turns: 10
 
 env:
-  name: sokoban
+  name: math_code
 
 logging:
   log_images: True

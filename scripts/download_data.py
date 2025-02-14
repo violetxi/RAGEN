@@ -3,7 +3,7 @@
 import os
 from huggingface_hub import snapshot_download
 
-def download_datasets(repo_id="ZihanWang314/ragen-datasets", local_dir="data"):
+def download_datasets(repo_id="HuggingFaceH4/MATH-500", local_dir="data/math"):
     """
     Download all datasets from Hugging Face Hub to local directory.
     

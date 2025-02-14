@@ -1,0 +1,7 @@
+env_config:
+  dataset_id: HuggingFaceH4/MATH-500
+  split: test
+  n_problems: 10
+
+model_config:
+  

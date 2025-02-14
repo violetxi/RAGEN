@@ -195,7 +195,6 @@ class LLMGenerationManager:
         active_num_list = [active_mask.sum().item()] 
         rollings = gen_batch
 
-
         # Main generation loop
         for step in range(self.config.max_turns):
             if not active_mask.sum():
@@ -222,7 +221,7 @@ class LLMGenerationManager:
             next_obs, dones = self.env_class.execute_predictions(
                 envs, responses_str, self.tokenizer.pad_token
             )
-            breakpoint()
+            
             active_mask = torch.tensor([not done for done in dones], dtype=torch.bool)
             active_num_list.append(active_mask.sum().item())
             next_obs_ids = self._process_next_obs(next_obs)

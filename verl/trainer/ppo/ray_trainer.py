@@ -354,7 +354,8 @@ class RayPPOTrainer(object):
         from torch.utils.data import DataLoader
         # TODO: we have to make sure the batch size is divisible by the dp size
         from verl.utils.dataset.rl_dataset import RLHFDataset, collate_fn
-        self.train_dataset = RLHFDataset(parquet_files=self.config.data.train_files,
+        from verl.utils.dataset.base_rl_dataset import BaseRLDataset
+        self.train_dataset = BaseRLDataset(dataset_id=self.config.data.dataset_id,
                                          tokenizer=self.tokenizer,
                                          prompt_key=self.config.data.prompt_key,
                                          max_prompt_length=self.config.data.max_prompt_length,
@@ -367,7 +368,7 @@ class RayPPOTrainer(object):
                                            drop_last=True,
                                            collate_fn=collate_fn)
 
-        self.val_dataset = RLHFDataset(parquet_files=self.config.data.val_files,
+        self.val_dataset = BaseRLDataset(parquet_files=self.config.data.val_files,
                                        tokenizer=self.tokenizer,
                                        prompt_key=self.config.data.prompt_key,
                                        max_prompt_length=self.config.data.max_prompt_length,
@@ -380,6 +381,7 @@ class RayPPOTrainer(object):
                                          drop_last=True,
                                          collate_fn=collate_fn)
 
+        
         assert len(self.train_dataloader) >= 1
         assert len(self.val_dataloader) >= 1
 
@@ -412,6 +414,7 @@ class RayPPOTrainer(object):
                 return {}
 
             test_gen_batch = test_batch.pop(['input_ids', 'attention_mask', 'position_ids'])
+            breakpoint()
             test_gen_batch.meta_info = {
                 'eos_token_id': self.tokenizer.eos_token_id,
                 'pad_token_id': self.tokenizer.pad_token_id,
@@ -583,8 +586,6 @@ class RayPPOTrainer(object):
         # we start from step 1
         self.global_steps += 1
 
-
-
         # Agent config preparation
         gen_config = GenerationConfig(
             max_turns=self.config.max_turns,
@@ -605,7 +606,6 @@ class RayPPOTrainer(object):
         )
 
         envs = [self.env.copy() for _ in range(self.config.data.train_batch_size * self.config.actor_rollout_ref.rollout.n_agent)]
-        breakpoint()
 
         # start training loop
         for epoch in range(self.config.trainer.total_epochs):
@@ -623,8 +623,7 @@ class RayPPOTrainer(object):
                     env.reset(seed=seed)
 
                 # pop those keys for generation
-                gen_batch = batch.pop(batch_keys=['input_ids', 'attention_mask', 'position_ids'])
-                breakpoint()
+                gen_batch = batch.pop(batch_keys=['input_ids', 'attention_mask', 'position_ids'])                
                 ####################
                 # original code here
 

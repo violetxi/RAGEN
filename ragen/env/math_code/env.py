@@ -4,8 +4,8 @@ import numpy as np
 import datasets
 from omegaconf import DictConfig
 
-from math_evaluator import MathEvaluator
-from code_execution_utils import PythonREPL
+from .math_evaluator import MathEvaluator
+from .code_execution_utils import PythonREPL
 
 
 class MathCodeEnv:
@@ -17,8 +17,12 @@ class MathCodeEnv:
         self.math_evaluator = MathEvaluator()        
 
     def _load_dataset(self):
-        """ Load the dataset """
-        pass
+        ds = datasets.load_dataset(self.config.dataset_id, self.config.split)
+        ds = ds.select(range(self.config.num_questions))
+        self.problems = ds['problem']
+        self.answers = ds['answer']
+
+        self.prompt_template = "Question: {problem}\n\nSolution: "
 
     def reset(self, seed=None):
         """ Reset the environment to a new question """
